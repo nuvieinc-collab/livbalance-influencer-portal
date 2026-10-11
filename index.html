@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LivBalance Influencer Portal</title>
+<meta name="description" content="Top 5 influencer leaderboard by Purchase Conversion Value" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf8f4; --panel:#ffffff; --ink:#1f2a24; --muted:#6b7a70;
+    --sage:#5c7a63; --sage-dk:#3f5a46; --coral:#e2694b; --coral-dk:#c14f34;
+    --line:#e6e1d6; --gold:#c9a24a;
+    --radius:16px;
+    --font-display:'Sora',sans-serif; --font-body:'Work Sans',sans-serif; --font-mono:'JetBrains Mono',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#141915; --panel:#1c231d; --ink:#eef1ec; --muted:#9aa89f;
+      --sage:#7ea089; --sage-dk:#a7c4b1; --coral:#ef8168; --coral-dk:#f3a087;
+      --line:#2b3329; --gold:#e0bd6d;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#141915; --panel:#1c231d; --ink:#eef1ec; --muted:#9aa89f;
+    --sage:#7ea089; --sage-dk:#a7c4b1; --coral:#ef8168; --coral-dk:#f3a087;
+    --line:#2b3329; --gold:#e0bd6d;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 18px 60px;}
+  .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:32px;max-width:420px;width:100%;}
+  .card h1{font-family:var(--font-display);font-size:22px;margin:0 0 6px;}
+  .card p{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 20px;}
+  input[type=email]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;}
+  button{cursor:pointer;border:none;border-radius:10px;padding:12px 18px;font-family:var(--font-body);font-weight:600;font-size:15px;}
+  .btn-primary{background:var(--sage-dk);color:#fff;width:100%;margin-top:12px;}
+  .btn-primary:disabled{opacity:.6;cursor:default;}
+  .btn-ghost{background:transparent;color:var(--muted);text-decoration:underline;padding:6px 0;}
+  .msg{font-size:13px;margin-top:14px;line-height:1.5;}
+  .msg.err{color:var(--coral-dk);}
+  .msg.ok{color:var(--sage-dk);}
+  header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:12px;flex-wrap:wrap;}
+  .brandmark{font-family:var(--font-display);font-weight:800;font-size:20px;}
+  .who{display:flex;align-items:center;gap:10px;}
+  .pill{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);}
+  .pill.brand{color:var(--gold);border-color:var(--gold);}
+  .pill.influencer{color:var(--sage-dk);border-color:var(--sage);}
+  .signout{font-size:13px;color:var(--muted);background:none;border:none;text-decoration:underline;padding:0;}
+  h2.section{font-family:var(--font-display);font-size:18px;margin:28px 0 12px;}
+  .rangebar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;}
+  .preset{background:var(--panel);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:500;padding:8px 14px;border-radius:999px;}
+  .preset.active{background:var(--sage-dk);color:#fff;border-color:var(--sage-dk);}
+  .datefields{display:flex;align-items:center;gap:8px;margin-left:auto;}
+  .datefields input[type=date]{padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-family:var(--font-mono);font-size:12px;}
+  .rangelabel{font-size:12px;color:var(--muted);margin-bottom:16px;}
+  .board{display:flex;flex-direction:column;gap:10px;}
+  .row{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .rank{font-family:var(--font-display);font-weight:800;font-size:18px;width:30px;text-align:center;color:var(--muted);}
+  .row:nth-child(1) .rank{color:var(--gold);font-size:22px;}
+  .row:nth-child(2) .rank{color:#9aa4ac;}
+  .row:nth-child(3) .rank{color:var(--coral-dk);}
+  .rinfo{flex:1;min-width:0;}
+  .rname{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .tag{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;}
+  .socials{display:flex;gap:8px;margin-top:5px;}
+  .socials a{color:var(--muted);display:inline-flex;}
+  .socials a:hover{color:var(--sage-dk);}
+  .rvalue{font-family:var(--font-mono);font-weight:600;font-size:16px;white-space:nowrap;}
+  .empty{color:var(--muted);font-size:14px;padding:24px;text-align:center;border:1px dashed var(--line);border-radius:14px;}
+  footer.foot{margin-top:30px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;}
+  .hide{display:none !important;}
+</style>
+</head>
+<body>
+
+<div id="app" class="wrap">
+  <header class="top">
+    <div class="brandmark">LivBalance <span style="color:var(--sage-dk)">Influencer Portal</span></div>
+  </header>
+
+  <h2 class="section">Top 10 · Purchase Conversion Value</h2>
+  <div class="rangelabel">All-time, Jun 11 – Oct 11, 2026</div>
+
+  <div id="board" class="board"></div>
+
+  <footer class="foot">
+    <b>Data:</b> In-house creators: Meta purchase conversion value from campaigns with "Influencer" in the name. External influencers: Shopify sales through their discount codes. Anyone with no sales is left out. Recent days can still change slightly as Meta finishes attributing purchases.
+  </footer>
+</div>
+
+<script>
+const ENTITIES = {"PAU": {"name": "Pau", "type": "house", "fb": "https://www.facebook.com/profile.php?id=61590043381933", "ig": "https://www.instagram.com/ashi.latte"}, "ROB": {"name": "Rob", "type": "house", "fb": "https://www.facebook.com/atherealis", "ig": "https://www.instagram.com/atherealis"}, "HANNAH": {"name": "Hannah", "type": "house", "fb": "https://www.facebook.com/itshanabeat", "ig": "https://www.instagram.com/itshanabeat"}, "FAITH": {"name": "Faith", "type": "house", "fb": "https://www.facebook.com/MsFaithdiaries", "ig": "https://www.instagram.com/msfaithdiaries"}, "ATHE05": {"name": "Althea Marie Calma", "type": "ext", "fb": "https://www.facebook.com/althea.calma", "ig": "https://www.instagram.com/calmaalthea"}, "JOANA05": {"name": "Joana Deduyo", "type": "ext", "fb": "https://www.facebook.com/midwifejoana", "ig": "https://www.instagram.com/midwifejoana"}, "GELYN05": {"name": "Angelyn Mancenido", "type": "ext", "fb": "https://www.facebook.com/share/1HhofrHY3u/", "ig": "https://www.instagram.com/mommygergel"}, "MEKRIS": {"name": "Mekris Malabanan", "type": "ext", "fb": "https://www.facebook.com/mekrisTV", "ig": "https://www.instagram.com/_mekris"}, "MISSLAE05": {"name": "Miss Lae", "type": "ext", "fb": "https://www.facebook.com/share/18cTceuh91/", "ig": "https://www.instagram.com/miss.lae_"}, "KARA5": {"name": "Kara Rodriguez", "type": "ext", "fb": "https://www.facebook.com/profile.php?id=100086257550403", "ig": "https://www.instagram.com/karaysabella"}, "MamaTin05": {"name": "Tin Dieron", "type": "ext", "fb": null, "ig": "https://www.instagram.com/mama_tin__"}, "ALEX05": {"name": "Alex May Manalac", "type": "ext", "fb": "https://www.facebook.com/manalacalexmay/reels/", "ig": "https://www.instagram.com/manalacalex"}, "KHANA5": {"name": "Khana Beligolo", "type": "ext", "fb": "https://www.facebook.com/AGinfectsManila", "ig": "https://www.instagram.com/khanajenner"}, "SHY05": {"name": "Mommy Shy Vlogs", "type": "ext", "fb": "https://www.facebook.com/shylipcosmetic/reels/", "ig": null}, "RENCY05": {"name": "Rency Male", "type": "ext", "fb": "https://www.facebook.com/share/1Dy49PTEfh/", "ig": "https://www.instagram.com/sassyrency_"}, "MITCH5": {"name": "Mommy Mitchy", "type": "ext", "fb": null, "ig": null}, "RAIA5": {"name": "Raia", "type": "ext", "fb": null, "ig": "https://www.instagram.com/doseofraia"}};
+const TOTALS = {"PAU": 131078.3, "ROB": 304585.35, "HANNAH": 344069.85, "FAITH": 748579.96, "ATHE05": 193020.55, "JOANA05": 104071.55, "GELYN05": 66693.8, "MITCH5": 8798.9, "SHY05": 6172.15, "MISSLAE05": 60274.65, "RENCY05": 4771.85, "MamaTin05": 6376.4, "KARA5": 24470.1, "KHANA5": 4048.9, "ALEX05": 7229.5, "RAIA5": 664.05, "MEKRIS": 39739.45};
+
+const ICON_IG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>`;
+const ICON_FB = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`;
+
+function socialsHtml(e){
+  let html = '';
+  if (e.ig) html += `<a href="${e.ig}" target="_blank" rel="noopener" title="Instagram">${ICON_IG}</a>`;
+  if (e.fb) html += `<a href="${e.fb}" target="_blank" rel="noopener" title="Facebook">${ICON_FB}</a>`;
+  return html ? `<div class="socials">${html}</div>` : '';
+}
+function fmtPeso(n){ return '₱' + Math.round(n).toLocaleString('en-PH'); }
+
+const leaders = Object.entries(TOTALS)
+  .filter(([k, v]) => v > 0 && ENTITIES[k])
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10);
+
+document.getElementById("board").innerHTML = leaders.map(([k, v], i) => `
+  <div class="row">
+    <div class="rank">${i + 1}</div>
+    <div class="rinfo">
+      <div class="rname">${ENTITIES[k].name} <span class="tag">${ENTITIES[k].type === 'house' ? 'in-house' : 'external'}</span></div>
+      ${socialsHtml(ENTITIES[k])}
+    </div>
+    <div class="rvalue">${fmtPeso(v)}</div>
+  </div>
+`).join('');
+</script>
+</body>
+</html>
